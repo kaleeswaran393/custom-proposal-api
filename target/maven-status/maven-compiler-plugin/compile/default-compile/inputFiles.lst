@@ -1,0 +1,11 @@
+C:\cia\Lumen\proposal-generator\custom-proposal-api\src\main\java\com\lumen\docgen\config\TemplateConfig.java
+C:\cia\Lumen\proposal-generator\custom-proposal-api\src\main\java\com\lumen\docgen\controller\DocumentMergerController.java
+C:\cia\Lumen\proposal-generator\custom-proposal-api\src\main\java\com\lumen\docgen\controller\TemplateController.java
+C:\cia\Lumen\proposal-generator\custom-proposal-api\src\main\java\com\lumen\docgen\DocGenApplication.java
+C:\cia\Lumen\proposal-generator\custom-proposal-api\src\main\java\com\lumen\docgen\dto\FileSystemItemDTO.java
+C:\cia\Lumen\proposal-generator\custom-proposal-api\src\main\java\com\lumen\docgen\exception\GlobalExceptionHandler.java
+C:\cia\Lumen\proposal-generator\custom-proposal-api\src\main\java\com\lumen\docgen\exception\TemplateException.java
+C:\cia\Lumen\proposal-generator\custom-proposal-api\src\main\java\com\lumen\docgen\model\DocumentMergeRequest.java
+C:\cia\Lumen\proposal-generator\custom-proposal-api\src\main\java\com\lumen\docgen\model\MergeParameters.java
+C:\cia\Lumen\proposal-generator\custom-proposal-api\src\main\java\com\lumen\docgen\service\DocumentMergerService.java
+C:\cia\Lumen\proposal-generator\custom-proposal-api\src\main\java\com\lumen\docgen\service\TemplateFileService.java
