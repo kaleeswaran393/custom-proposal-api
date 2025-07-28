@@ -1,55 +1,61 @@
 package com.lumen.docgen.service;
 
-import com.lumen.docgen.dto.FileSystemItemDTO;
-import org.springframework.stereotype.Service;
-
 import java.io.File;
 import java.nio.file.Files;
-import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
+import com.lumen.docgen.config.TemplateConfig;
+import com.lumen.docgen.model.FileInfo;
+
 @Service
 public class TemplateFileService {
+    
+    private final TemplateConfig templateConfig;
 
-    private final String templateRootPath = "path/to/your/templates"; // Configure this path
-
-    public List<FileSystemItemDTO> getAvailableTemplates() {
-        File rootDir = new File(templateRootPath);
-        return getFileSystemItems(rootDir);
+    public TemplateFileService(TemplateConfig templateConfig) {
+        this.templateConfig = templateConfig;
     }
 
-    private List<FileSystemItemDTO> getFileSystemItems(File directory) {
-        List<FileSystemItemDTO> items = new ArrayList<>();
-        File[] files = directory.listFiles();
+    public List<FileInfo> getTemplateStructure() {
+        File rootDir = new File(templateConfig.getPath());
+        if (!rootDir.exists() || !rootDir.isDirectory()) {
+            throw new RuntimeException("Template directory not found: " + templateConfig.getPath());
+        }
+        return getFileInfoList(rootDir);
+    }
 
+    private List<FileInfo> getFileInfoList(File directory) {
+        List<FileInfo> fileInfoList = new ArrayList<>();
+        File[] files = directory.listFiles();
+        
         if (files != null) {
             for (File file : files) {
+                FileInfo fileInfo = new FileInfo();
+                fileInfo.setName(file.getName());
+                fileInfo.setDirectory(file.isDirectory());
                 try {
-                    FileSystemItemDTO item = new FileSystemItemDTO();
-                    item.setName(file.getName());
-                    item.setPath(file.getPath());
-                    item.setDirectory(file.isDirectory());
-
-                    BasicFileAttributes attrs = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
-                    LocalDateTime lastModified = LocalDateTime.ofInstant(
-                        attrs.lastModifiedTime().toInstant(),
+                    fileInfo.setLastModified(LocalDateTime.ofInstant(
+                        Files.getLastModifiedTime(Path.of(file.getPath())).toInstant(), 
                         ZoneId.systemDefault()
-                    );
-                    item.setLastModified(lastModified);
-
-                    if (file.isDirectory()) {
-                        item.setChildren(getFileSystemItems(file));
-                    }
-
-                    items.add(item);
-                } catch (Exception e) {
-                    // Handle or log the exception appropriately
+                    ));
+                } catch (java.io.IOException e) {
+                    fileInfo.setLastModified(null);
                 }
+
+                if (file.isDirectory()) {
+                    fileInfo.setChildren(getFileInfoList(file));
+                }
+                
+                fileInfoList.add(fileInfo);
             }
         }
-        return items;
+        
+        return fileInfoList;
     }
 }

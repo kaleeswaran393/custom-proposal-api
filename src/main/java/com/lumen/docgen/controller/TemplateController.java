@@ -1,24 +1,27 @@
 package com.lumen.docgen.controller;
-import com.lumen.docgen.dto.FileSystemItemDTO;
-import com.lumen.docgen.service.TemplateFileService;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.lumen.docgen.model.FileInfo;
+import com.lumen.docgen.service.TemplateFileService;
 
 @RestController
 @RequestMapping("/api/templates")
 public class TemplateController {
+    
+    private final TemplateFileService templateFileService;
 
-    @Autowired
-    private TemplateFileService templateFileService;
+    public TemplateController(TemplateFileService templateFileService) {
+        this.templateFileService = templateFileService;
+    }
 
-    @GetMapping("/available")
-    public ResponseEntity<List<FileSystemItemDTO>> getAvailableTemplates() {
-        List<FileSystemItemDTO> templates = templateFileService.getAvailableTemplates();
-        return ResponseEntity.ok(templates);
+    @GetMapping("/structure")
+    public ResponseEntity<List<FileInfo>> getTemplateStructure() {
+        return ResponseEntity.ok(templateFileService.getTemplateStructure());
     }
 }
